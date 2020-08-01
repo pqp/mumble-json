@@ -44,14 +44,14 @@ userMap = server.getUsers()
 ##################################################################################
 
 channelChildrenMap = dict()
-for key, channel in channelMap.iteritems():
+for key, channel in channelMap.items():
     if channel.parent in channelChildrenMap:
         channelChildrenMap[channel.parent].append(channel)
     else:
         channelChildrenMap[channel.parent] = [ channel ] 
 
 usersInChannelMap = dict()
-for key, user in userMap.iteritems():
+for key, user in userMap.items():
     if user.channel in usersInChannelMap:
         usersInChannelMap[user.channel].append(user)
     else:
@@ -80,68 +80,68 @@ def getChannelLinks(channel):
 # user: the user to print information for
 # tab: the preceeding tab string
 def printUser(user, tab):
-    print tab + '"channel": ' + str(user.channel) + ','
-    print tab + '"deaf": ' + str(user.deaf).lower() + ','
-    print tab + '"mute": ' + str(user.mute).lower() + ','
-    print tab + '"name": "' + sanitize(user.name) + '",'
-    print tab + '"selfDeaf": ' + str(user.selfDeaf).lower() + ','
-    print tab + '"selfMute": ' + str(user.selfMute).lower() + ','
-    print tab + '"session": ' + str(user.session) + ','
-    print tab + '"suppress": ' + str(user.suppress).lower() + ','
-    print tab + '"userid": ' + str(user.userid) + ','
-    print tab + '"recording": ' + str(user.recording).lower() + ','
-    print tab + '"prioritySpeaker": ' + str(user.prioritySpeaker).lower() + ','
-    print tab + '"comment": "' + sanitize(user.comment) + '"'
+    print(tab + '"channel": ' + str(user.channel) + ',')
+    print(tab + '"deaf": ' + str(user.deaf).lower() + ',')
+    print(tab + '"mute": ' + str(user.mute).lower() + ',')
+    print(tab + '"name": "' + sanitize(user.name) + '",')
+    print(tab + '"selfDeaf": ' + str(user.selfDeaf).lower() + ',')
+    print(tab + '"selfMute": ' + str(user.selfMute).lower() + ',')
+    print(tab + '"session": ' + str(user.session) + ',')
+    print(tab + '"suppress": ' + str(user.suppress).lower() + ',')
+    print(tab + '"userid": ' + str(user.userid) + ',')
+    print(tab + '"recording": ' + str(user.recording).lower() + ',')
+    print(tab + '"prioritySpeaker": ' + str(user.prioritySpeaker).lower() + ',')
+    print(tab + '"comment": "' + sanitize(user.comment) + '"')
 
 # Print the users that are in a certain channel.
 # channel: the channel to print users for
 # tab: the preceeding tab string
 def printChannelUsers(channel, tab):
-    print tab + '"users": ['
+    print(tab + '"users": [')
     first = True
 
     if channel.id in usersInChannelMap:
         for user in usersInChannelMap[channel.id]:
             if first:
-                print tab + '{'
+                print(tab + '{')
                 first = False
             else:
-                print tab + ',{'
+                print(tab + ',{')
             printUser(user, tab + '\t')
-            print tab + '}'
-    print tab + '],'
+            print(tab + '}')
+    print(tab + '],')
 
 # Print the children of a channel.
 # A child is channel, that has the given channel.id as parent.
 # channel: the channel to print children for
 # tab: the preceeding tab string
 def printChannelChildren(channel, tab):
-    print tab + '"channels": ['
+    print(tab + '"channels": [')
     first = True
 
     if channel.id in channelChildrenMap:
         for child in channelChildrenMap[channel.id]:
             if first:
-                print tab + '{'
+                print(tab + '{')
                 first = False
             else:
-                print tab + ',{'
+                print(tab + ',{')
             printChannel(child, tab + '\t')
-            print tab +  '}'
-    print tab + ']'
+            print(tab +  '}')
+    print(tab + ']')
 
 # Print a channel information.
 # channel: the channel to print information for
 # tab: the preceeding tab string
 def printChannel(channel, tab):
-    print tab + '"name": "' + sanitize(channel.name) + '",'
-    print tab + '"id": ' + str(channel.id) + ','
-    print tab + '"description": "' + sanitize(channel.description) + '",'
-    #print tab + '"description": "",'
-    print tab + '"links": [' + getChannelLinks(channel) + '],'
-    print tab + '"parent": ' + str(channel.parent) + ','
-    print tab + '"position": ' + str(channel.position) + ','
-    print tab + '"temporary": ' + str(channel.temporary).lower() +","
+    print(tab + '"name": "' + sanitize(channel.name) + '",')
+    print(tab + '"id": ' + str(channel.id) + ',')
+    print(tab + '"description": "' + sanitize(channel.description) + '",')
+    #print(tab + '"description": "",')
+    print(tab + '"links": [' + getChannelLinks(channel) + '],')
+    print(tab + '"parent": ' + str(channel.parent) + ',')
+    print(tab + '"position": ' + str(channel.position) + ',')
+    print(tab + '"temporary": ' + str(channel.temporary).lower() +",")
 
     printChannelUsers(channel, tab )
     printChannelChildren(channel, tab )
@@ -150,33 +150,31 @@ def printChannel(channel, tab):
 # Server information includes channels and all users.
 def printServer():
     tab = '\t'
-    print '{'
-    print tab + '"id": ' + str(SERVER_ID) + ','
-    print tab + '"name": "' + SERVER_NAME + '",'
-    print tab + '"root": '
+    print('{')
+    print(tab + '"id": ' + str(SERVER_ID) + ',')
+    print(tab + '"name": "' + SERVER_NAME + '",')
+    print(tab + '"root": ')
     first = True
     rootId = -1
 
     if rootId in channelChildrenMap:
         for channel in channelChildrenMap[rootId]:
             if first:
-                print tab + '{'
+                print(tab + '{')
                 first = False
             else:
-                print tab + ',{'
+                print(tab + ',{')
             printChannel(channel, tab + '\t')
-            print tab + '}'
+            print(tab + '}')
     else:
-        print '{}'
+        print('{}')
 
-    print '}'
+    print('}')
 
 ##################################################################################
 # Print JSON to stdout 
 ##################################################################################
 
-print 'Content-Type: text/plain'
-print
 printServer()
 
 ##################################################################################
