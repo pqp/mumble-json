@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # The server name to display
 SERVER_NAME = "My Server"
@@ -25,7 +25,7 @@ import Murmur
 # Init ice
 comm = Ice.initialize()
 # Let Ice know where to go to connect to mumble
-proxy = comm.stringToProxy('Meta -e 1.0:tcp -p ' + str(ICE_PORT))
+proxy = comm.stringToProxy('Meta -e 1.0:tcp -h mumble -p ' + str(ICE_PORT))
 # Create a dynamic object that allows us to get a programmable interface for Mumble
 meta = Murmur.MetaPrx.checkedCast(proxy)
 
