@@ -18,6 +18,7 @@ ICE_PORT = 6502
 
 import Ice
 import sys
+import time
 
 Ice.loadSlice( "", ["-I" + Ice.getSliceDir(), SLICE])
 import Murmur
@@ -176,6 +177,8 @@ def printServer():
 ##################################################################################
 
 printServer()
+
+time.sleep(10)
 
 ##################################################################################
 # Close Ice communication 
